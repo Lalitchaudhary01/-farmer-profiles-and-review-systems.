@@ -10,7 +10,6 @@ function Register() {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    // Mock registration logic
     toast.success("Account created successfully!");
     navigate("/login");
   };

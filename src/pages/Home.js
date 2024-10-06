@@ -1,10 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Home() {
+  const navigate = useNavigate();
   const farmers = [
     { id: 1, name: "Farmer A", bio: "Experienced in organic farming" },
     { id: 2, name: "Farmer B", bio: "Specializes in fruit cultivation" },
   ];
+  const handleLogout = () => {
+    navigate("/login");
+  };
 
   return (
     <div className="p-6">
@@ -19,6 +23,14 @@ function Home() {
           </li>
         ))}
       </ul>
+      <div className="flex justify-center mt-6">
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white p-3 rounded hover:bg-red-600"
+        >
+          Log Out
+        </button>
+      </div>
     </div>
   );
 }

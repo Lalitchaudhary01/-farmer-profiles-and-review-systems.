@@ -26,22 +26,7 @@ const FarmerProfile = () => {
   const { id } = useParams();
   const farmer = farmers.find((farmer) => farmer.id === parseInt(id));
 
-  const [comments, setComments] = useState([
-    {
-      user: "User 1",
-      comment: "Great experience with Farmer A!",
-      rating: 5,
-      likes: 0,
-      replies: [],
-    },
-    {
-      user: "User 2",
-      comment: "Very knowledgeable and helpful.",
-      rating: 4,
-      likes: 0,
-      replies: [],
-    },
-  ]);
+  const [comments, setComments] = useState([]);
 
   const [newComment, setNewComment] = useState("");
   const [newRating, setNewRating] = useState(0);
@@ -52,7 +37,7 @@ const FarmerProfile = () => {
     const newCommentsList = [
       ...comments,
       {
-        user: "You",
+        user: "Lalit",
         comment: newComment,
         rating: newRating,
         likes: 0,

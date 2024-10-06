@@ -15,11 +15,12 @@ function App() {
     <Router>
       <Toaster /> {/* For toast notifications */}
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/farmer/:id" element={<FarmerProfile />} />
+        {/* Redirect from any other root path to /login */}
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );

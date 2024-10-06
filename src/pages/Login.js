@@ -12,7 +12,7 @@ function Login() {
     // Mock login logic
     if (email === "test1@email.com" && password === "password") {
       toast.success("Logged in successfully!");
-      navigate("/");
+      navigate("/"); // Redirect to home page on successful login
     } else {
       toast.error("Invalid credentials!");
     }
@@ -41,7 +41,7 @@ function Login() {
           />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded"
+            className="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600"
           >
             Login
           </button>
