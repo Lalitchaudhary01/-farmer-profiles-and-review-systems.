@@ -14,7 +14,8 @@ const farmers = [
   {
     id: 2,
     name: "Farmer B",
-    photo: "link_to_photo_B",
+    photo:
+      "https://plus.unsplash.com/premium_photo-1661964146096-98dbd0becc78?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8d29tZW4lMjBmYXJtZXJ8ZW58MHx8MHx8fDA%3D",
     email: "farmerB@example.com",
     phone: "0987654321",
     bio: "Specializes in fruit cultivation",
