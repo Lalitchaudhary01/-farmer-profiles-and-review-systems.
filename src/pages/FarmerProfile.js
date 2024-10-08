@@ -3,13 +3,13 @@ import { useParams } from "react-router-dom";
 import toast from "react-hot-toast"; // For notifications
 
 const FarmerProfile = () => {
-  const { id } = useParams(); // Get the farmer's id from the URL
+  const { id } = useParams();
   const [farmer, setFarmer] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [newRating, setNewRating] = useState(0);
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchFarmer = async () => {
@@ -23,7 +23,7 @@ const FarmerProfile = () => {
         setComments(data.comments);
       } catch (error) {
         setError(error.message);
-        toast.error("Error fetching farmer profile."); // Show error notification
+        toast.error("Error fetching farmer profile.");
       } finally {
         setLoading(false);
       }
@@ -34,7 +34,7 @@ const FarmerProfile = () => {
 
   const handleCommentSubmit = async () => {
     if (!newComment.trim() || newRating === 0) {
-      toast.error("Please enter a comment and a rating."); // Error notification for validation
+      toast.error("Please enter a comment and a rating.");
       return;
     }
 
@@ -47,7 +47,7 @@ const FarmerProfile = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            user: "Pranjali", // Static user for now
+            user: "Pranjali",
             comment: newComment,
             rating: newRating,
           }),
@@ -114,19 +114,19 @@ const FarmerProfile = () => {
 
       const updatedFarmer = await response.json();
       setComments(updatedFarmer.comments);
-      toast.success("Comment deleted!"); // Success notification
+      toast.success("Comment deleted!");
     } catch (error) {
       setError(error.message);
-      toast.error("Error deleting comment."); // Error notification
+      toast.error("Error deleting comment.");
     }
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Loading state
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>; // Error handling
+    return <div>Error: {error}</div>;
   }
 
   return (

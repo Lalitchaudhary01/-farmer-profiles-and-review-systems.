@@ -1,41 +1,41 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast"; // Importing toast for notifications
-import axios from "axios"; // Importing axios for API calls
-import { useAuth } from "../AuthContext"; // Importing useAuth
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useAuth } from "../AuthContext";
 
 function Home() {
   const navigate = useNavigate();
-  const { logout } = useAuth(); // Access the logout function from context
+  const { logout } = useAuth(); //
   const [farmers, setFarmers] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true); //
 
   // Fetch farmers from the API
   const fetchFarmers = async () => {
     try {
-      const response = await axios.get("/api/farmers"); // Replace with your actual API endpoint
-      setFarmers(response.data); // Set the farmers data
+      const response = await axios.get("/api/farmers");
+      setFarmers(response.data);
     } catch (error) {
       console.error("Error fetching farmers:", error);
       toast.error("Failed to load farmers. Please try again.");
     } finally {
-      setLoading(false); // Set loading to false regardless of success or failure
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchFarmers(); // Fetch farmers when the component mounts
+    fetchFarmers();
   }, []);
 
   const handleLogout = () => {
-    logout(); // Call the logout function from context
-    navigate("/login"); // Redirect to login page
+    logout();
+    navigate("/login");
   };
 
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Farmers List</h2>
-      {loading ? ( // Display loading state while fetching data
+      {loading ? (
         <p>Loading farmers...</p>
       ) : (
         <ul className="space-y-4">
@@ -52,7 +52,7 @@ function Home() {
               </li>
             ))
           ) : (
-            <p>No farmers found.</p> // Message if no farmers are available
+            <p>No farmers found.</p>
           )}
         </ul>
       )}

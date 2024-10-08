@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import FarmerCard from "./FarmerCard"; // Import the FarmerCard component
+import FarmerCard from "./FarmerCard";
 
 const FarmerList = () => {
   const [farmers, setFarmers] = useState([]);

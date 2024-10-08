@@ -2,23 +2,47 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useAuth } from "../AuthContext"; // Import useAuth
+import { useAuth } from "../AuthContext";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(""); // Changed to username
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth(); // Access the login function
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Mock login logic
-    if (email === "test1@email.com" && password === "password") {
-      toast.success("Logged in successfully!");
-      login(); // Call login function from context
-      navigate("/"); // Redirect to home page on successful login
-    } else {
-      toast.error("Invalid credentials!");
+
+    // Prepare the payload
+    const payload = {
+      username,
+      password,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Invalid credentials!"); // Handle non-200 responses
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        // Adjust based on your API response structure
+        toast.success("Logged in successfully!");
+        login(); // Call login function from context
+        navigate("/"); // Redirect to home page on successful login
+      } else {
+        toast.error("Invalid credentials!"); // Handle API error response
+      }
+    } catch (error) {
+      toast.error(error.message); // Display error message
     }
   };
 
@@ -28,10 +52,10 @@ function Login() {
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleLogin}>
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text" // Changed to text for username
+            placeholder="Username"
+            value={username} // Use username instead of email
+            onChange={(e) => setUsername(e.target.value)}
             className="w-full p-3 border rounded mb-4"
             required
           />
