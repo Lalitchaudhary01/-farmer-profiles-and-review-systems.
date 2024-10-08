@@ -6,14 +6,14 @@ import { useAuth } from "../AuthContext";
 
 function Home() {
   const navigate = useNavigate();
-  const { logout } = useAuth(); //
+  const { logout } = useAuth();
   const [farmers, setFarmers] = useState([]);
-  const [loading, setLoading] = useState(true); //
+  const [loading, setLoading] = useState(true);
 
   // Fetch farmers from the API
   const fetchFarmers = async () => {
     try {
-      const response = await axios.get("/api/farmers");
+      const response = await axios.get("http://localhost:8080/api/v1/farmers");
       setFarmers(response.data);
     } catch (error) {
       console.error("Error fetching farmers:", error);
@@ -27,9 +27,16 @@ function Home() {
     fetchFarmers();
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:8080/api/v1/user/logout"); // Adjust the endpoint as needed
+      logout(); // Call the logout function from context
+      navigate("/login"); // Redirect to login page
+      toast.success("Logged out successfully!"); // Notify user
+    } catch (error) {
+      console.error("Error logging out:", error);
+      toast.error("Failed to log out. Please try again."); // Handle errors
+    }
   };
 
   return (

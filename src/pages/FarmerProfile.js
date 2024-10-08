@@ -14,7 +14,9 @@ const FarmerProfile = () => {
   useEffect(() => {
     const fetchFarmer = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/farmers/${id}`);
+        const response = await fetch(
+          `http://localhost:8080/api/v1/farmers/${id}`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch farmer profile");
         }
@@ -40,7 +42,7 @@ const FarmerProfile = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/farmers/${id}/comments`,
+        `http://localhost:8080/api/v1/farmers/${id}/comments`,
         {
           method: "POST",
           headers: {
@@ -72,7 +74,7 @@ const FarmerProfile = () => {
   const handleLikeComment = async (commentIndex) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/farmers/${id}/comments/like`,
+        `http://localhost:8080/api/v1/farmers/${id}/comments/like`,
         {
           method: "POST",
           headers: {
@@ -98,7 +100,7 @@ const FarmerProfile = () => {
   const handleDeleteComment = async (commentIndex) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/farmers/${id}/comments`,
+        `http://localhost:8080/api/v1/farmers/${id}/comments`,
         {
           method: "DELETE",
           headers: {

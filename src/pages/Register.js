@@ -11,12 +11,11 @@ function Register() {
   const [phone, setPhone] = useState("");
   const [bio, setBio] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); // Access the login function from context
+  const { login } = useAuth();
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Validation: Ensure all fields are filled
     if (!name || !email || !password || !phone || !bio) {
       toast.error("Please fill in all fields.");
       return;
@@ -24,13 +23,16 @@ function Register() {
 
     try {
       // Make a POST request to your API endpoint for registration
-      const response = await axios.post("/api/register", {
-        name,
-        email,
-        password,
-        phone,
-        bio,
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/user/register",
+        {
+          name,
+          email,
+          password,
+          phone,
+          bio,
+        }
+      );
 
       // Assuming the API responds with the user data
       const userData = response.data; // Adjust according to your API response
