@@ -27,9 +27,11 @@ const FarmerProfile = () => {
   const farmer = farmers.find((farmer) => farmer.id === parseInt(id));
 
   const [comments, setComments] = useState([]);
-
   const [newComment, setNewComment] = useState("");
   const [newRating, setNewRating] = useState(0);
+
+  // Set a fixed username for the comments
+  const username = "Pranjali "; // You can replace  with a dynamic value when needed
 
   const handleCommentSubmit = () => {
     if (newComment.trim() === "") return;
@@ -37,13 +39,14 @@ const FarmerProfile = () => {
     const newCommentsList = [
       ...comments,
       {
-        user: "Lalit",
+        user: username, // Use the fixed username here
         comment: newComment,
         rating: newRating,
         likes: 0,
         replies: [],
       },
     ];
+
     setComments(newCommentsList);
     setNewComment("");
     setNewRating(0);
@@ -70,7 +73,7 @@ const FarmerProfile = () => {
       <img
         src={farmer.photo}
         alt={farmer.name}
-        className="w-32 h-32 rounded-full object-cover" // Adjusted width and height for circular shape
+        className="w-32 h-32 rounded-full object-cover"
       />
       <p className="text-gray-700">Email: {farmer.email}</p>
       <p className="text-gray-700">Phone: {farmer.phone}</p>
@@ -94,7 +97,7 @@ const FarmerProfile = () => {
                 key={rate}
                 className={`cursor-pointer text-xl ${
                   rate <= newRating ? "text-yellow-500" : "text-gray-300"
-                }`}
+                } hover:text-yellow-500`}
                 onClick={() => setNewRating(rate)}
               >
                 ⭐

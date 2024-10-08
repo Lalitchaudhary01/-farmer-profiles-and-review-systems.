@@ -1,17 +1,49 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import axios from "axios"; // Import Axios
 
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    toast.success("Account created successfully!");
-    navigate("/login");
+
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+
+    try {
+      // API call to register the user
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/user/register",
+        {
+          name,
+          email,
+          password,
+          confirmPassword,
+        }
+      );
+
+      // If registration is successful
+      if (response.status === 201) {
+        toast.success("Account created successfully!");
+        navigate("/login");
+      }
+    } catch (error) {
+      // Handle error scenarios
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    }
   };
 
   return (
@@ -40,6 +72,14 @@ function Register() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-3 border rounded mb-6"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full p-3 border rounded mb-6"
             required
           />
