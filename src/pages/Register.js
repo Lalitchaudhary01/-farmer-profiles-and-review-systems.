@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios"; // Import axios for API calls
-import { useAuth } from "../AuthContext"; // Import useAuth
 
 function Register() {
   const [name, setName] = useState("");
@@ -11,18 +10,18 @@ function Register() {
   const [phone, setPhone] = useState("");
   const [bio, setBio] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    // Check if any field is empty
     if (!name || !email || !password || !phone || !bio) {
       toast.error("Please fill in all fields.");
       return;
     }
 
     try {
-      // Make a POST request to your API endpoint for registration
+      // POST request to register the user
       const response = await axios.post(
         "http://localhost:8080/api/v1/user/register",
         {
@@ -34,13 +33,9 @@ function Register() {
         }
       );
 
-      // Assuming the API responds with the user data
-      const userData = response.data; // Adjust according to your API response
+      // Assuming the API response contains the user data
       toast.success("Registration successful!");
-
-      // Call the login function from context to set the user
-      login(userData);
-      navigate("/"); // Redirect to home page on successful registration
+      navigate("/login"); // Redirect to login page on successful registration
     } catch (error) {
       console.error("Registration error:", error);
       toast.error("Registration failed. Please try again.");

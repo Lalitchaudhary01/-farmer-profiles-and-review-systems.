@@ -1,14 +1,11 @@
-// Login.js
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useAuth } from "../AuthContext";
 
 function Login() {
-  const [username, setUsername] = useState(""); // Changed to username
+  const [username, setUsername] = useState(""); // State for username
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); // Access the login function
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,10 +30,14 @@ function Login() {
       }
 
       const data = await response.json();
+
       if (data.success) {
         // Adjust based on your API response structure
         toast.success("Logged in successfully!");
-        login(); // Call login function from context
+
+        // Optionally save token to localStorage for subsequent requests
+        localStorage.setItem("token", data.token);
+
         navigate("/"); // Redirect to home page on successful login
       } else {
         toast.error("Invalid credentials!"); // Handle API error response
@@ -52,9 +53,9 @@ function Login() {
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleLogin}>
           <input
-            type="text" // Changed to text for username
+            type="text" // Input for username
             placeholder="Username"
-            value={username} // Use username instead of email
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="w-full p-3 border rounded mb-4"
             required

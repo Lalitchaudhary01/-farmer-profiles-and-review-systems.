@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { useAuth } from "../AuthContext";
 
 function Home() {
   const navigate = useNavigate();
-  const { logout } = useAuth();
   const [farmers, setFarmers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,7 +28,6 @@ function Home() {
   const handleLogout = async () => {
     try {
       await axios.post("http://localhost:8080/api/v1/user/logout"); // Adjust the endpoint as needed
-      logout(); // Call the logout function from context
       navigate("/login"); // Redirect to login page
       toast.success("Logged out successfully!"); // Notify user
     } catch (error) {
