@@ -4,19 +4,38 @@ import toast from "react-hot-toast";
 import axios from "axios"; // Import axios for API calls
 
 function Register() {
-  const [name, setName] = useState("");
+  // Declare state variables for all the required fields
+  const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [bio, setBio] = useState("");
+  const [photo, setPhoto] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     // Check if any field is empty
-    if (!name || !email || !password || !phone || !bio) {
+    if (
+      !fullName ||
+      !username ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !phone ||
+      !bio ||
+      !photo
+    ) {
       toast.error("Please fill in all fields.");
+      return;
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match.");
       return;
     }
 
@@ -25,11 +44,13 @@ function Register() {
       const response = await axios.post(
         "http://localhost:8080/api/v1/user/register",
         {
-          name,
+          fullName,
+          username,
           email,
           password,
           phone,
           bio,
+          photo, // Include photo URL
         }
       );
 
@@ -49,9 +70,17 @@ function Register() {
         <form onSubmit={handleRegister}>
           <input
             type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            placeholder="Full Name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            className="w-full p-3 border rounded mb-4"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="w-full p-3 border rounded mb-4"
             required
           />
@@ -72,6 +101,14 @@ function Register() {
             required
           />
           <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full p-3 border rounded mb-4"
+            required
+          />
+          <input
             type="text"
             placeholder="Phone"
             value={phone}
@@ -83,6 +120,14 @@ function Register() {
             placeholder="Bio"
             value={bio}
             onChange={(e) => setBio(e.target.value)}
+            className="w-full p-3 border rounded mb-4"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Photo URL"
+            value={photo}
+            onChange={(e) => setPhoto(e.target.value)}
             className="w-full p-3 border rounded mb-4"
             required
           />

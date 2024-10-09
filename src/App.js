@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import "./App.css";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
