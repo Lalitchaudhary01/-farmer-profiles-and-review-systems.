@@ -47,7 +47,9 @@ function Register() {
           fullName,
           username,
           email,
+
           password,
+          confirmPassword,
           phone,
           bio,
           photo, // Include photo URL
