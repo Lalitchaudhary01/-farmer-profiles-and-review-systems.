@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast"; // For notifications
+import axios from "axios"; // Import Axios
 
 const FarmerProfile = () => {
   const { id } = useParams();
@@ -14,15 +15,11 @@ const FarmerProfile = () => {
   useEffect(() => {
     const fetchFarmer = async () => {
       try {
-        const response = await fetch(
+        const response = await axios.get(
           `http://localhost:8080/api/v1/farmers/${id}`
         );
-        if (!response.ok) {
-          throw new Error("Failed to fetch farmer profile");
-        }
-        const data = await response.json();
-        setFarmer(data);
-        setComments(data.comments);
+        setFarmer(response.data);
+        setComments(response.data.comments);
       } catch (error) {
         setError(error.message);
         toast.error("Error fetching farmer profile.");
@@ -41,81 +38,48 @@ const FarmerProfile = () => {
     }
 
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `http://localhost:8080/api/v1/farmers/${id}/comments`,
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user: "Pranjali",
-            comment: newComment,
-            rating: newRating,
-          }),
+          user: "Pranjali",
+          comment: newComment,
+          rating: newRating,
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to add comment");
-      }
-
-      const updatedFarmer = await response.json();
-      setComments(updatedFarmer.comments);
+      setComments(response.data.comments);
       setNewComment("");
       setNewRating(0);
-      toast.success("Comment added successfully!"); // Success notification
+      toast.success("Comment added successfully!");
     } catch (error) {
       setError(error.message);
-      toast.error("Error adding comment."); // Error notification
+      toast.error("Error adding comment.");
     }
   };
 
   const handleLikeComment = async (commentIndex) => {
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `http://localhost:8080/api/v1/farmers/${id}/comments/like`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ commentIndex }),
-        }
+        { commentIndex }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to like comment");
-      }
-
-      const updatedFarmer = await response.json();
-      setComments(updatedFarmer.comments);
-      toast.success("Comment liked!"); // Success notification
+      setComments(response.data.comments);
+      toast.success("Comment liked!");
     } catch (error) {
       setError(error.message);
-      toast.error("Error liking comment."); // Error notification
+      toast.error("Error liking comment.");
     }
   };
 
   const handleDeleteComment = async (commentIndex) => {
     try {
-      const response = await fetch(
+      const response = await axios.delete(
         `http://localhost:8080/api/v1/farmers/${id}/comments`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ commentIndex }),
-        }
+        { data: { commentIndex } } // Data for DELETE request should be sent in a `data` property
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to delete comment");
-      }
-
-      const updatedFarmer = await response.json();
-      setComments(updatedFarmer.comments);
+      setComments(response.data.comments);
       toast.success("Comment deleted!");
     } catch (error) {
       setError(error.message);

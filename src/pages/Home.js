@@ -10,8 +10,13 @@ function Home() {
 
   // Fetch farmers from the API
   const fetchFarmers = async () => {
+    const token = localStorage.getItem("authToken"); // Get token from local storage
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/farmers");
+      const response = await axios.get("http://localhost:8080/api/v1/farmers", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add token to headers if required
+        },
+      });
       setFarmers(response.data);
     } catch (error) {
       console.error("Error fetching farmers:", error);
@@ -27,12 +32,25 @@ function Home() {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:8080/api/v1/user/logout"); // Adjust the endpoint as needed
+      const token = localStorage.getItem("authToken"); // Get token from local storage
+      if (!token) {
+        toast.error("No user is logged in.");
+        return;
+      }
+
+      // Logout API call
+      await axios.get("http://localhost:8080/api/v1/user/logout", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Pass token in headers
+        },
+      });
+
+      localStorage.removeItem("authToken"); // Remove token on logout
       navigate("/login"); // Redirect to login page
-      toast.success("Logged out successfully!"); // Notify user
+      toast.success("Logged out successfully!");
     } catch (error) {
       console.error("Error logging out:", error);
-      toast.error("Failed to log out. Please try again."); // Handle errors
+      toast.error("Failed to log out. Please try again.");
     }
   };
 
@@ -45,9 +63,9 @@ function Home() {
         <ul className="space-y-4">
           {farmers.length > 0 ? (
             farmers.map((farmer) => (
-              <li key={farmer.id} className="bg-gray-100 p-4 rounded shadow">
+              <li key={farmer._id} className="bg-gray-100 p-4 rounded shadow">
                 <Link
-                  to={`/farmer/${farmer.id}`}
+                  to={`/farmer/${farmer._id}`}
                   className="text-blue-500 text-lg"
                 >
                   {farmer.name}
@@ -60,6 +78,7 @@ function Home() {
           )}
         </ul>
       )}
+
       <div className="flex justify-center mt-6">
         <button
           onClick={handleLogout}

@@ -54,9 +54,13 @@ function Register() {
         }
       );
 
-      // Assuming the API response contains the user data
-      toast.success("Registration successful!");
-      navigate("/login"); // Redirect to login page on successful registration
+      // Handle success or failure based on the API response
+      if (response.data.success) {
+        toast.success(response.data.message || "Registration successful!");
+        navigate("/login"); // Redirect to login page on successful registration
+      } else {
+        toast.error(response.data.message || "Registration failed.");
+      }
     } catch (error) {
       console.error("Registration error:", error);
       toast.error("Registration failed. Please try again.");
