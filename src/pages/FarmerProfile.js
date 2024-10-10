@@ -4,33 +4,35 @@ import toast from "react-hot-toast"; // For notifications
 import axios from "axios"; // Import Axios
 
 const FarmerProfile = () => {
-  const { id } = useParams();
-  const [farmer, setFarmer] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
-  const [newRating, setNewRating] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { id } = useParams(); // Getting the farmer's id from the route parameters
+  const [farmer, setFarmer] = useState(null); // To store the farmer's details
+  const [comments, setComments] = useState([]); // To store the comments
+  const [newComment, setNewComment] = useState(""); // To store the new comment text
+  const [newRating, setNewRating] = useState(0); // To store the new rating
+  const [loading, setLoading] = useState(true); // To handle the loading state
+  const [error, setError] = useState(null); // To handle errors
 
+  // Fetch farmer data when the component loads
   useEffect(() => {
     const fetchFarmer = async () => {
       try {
         const response = await axios.get(
           `http://localhost:8080/api/v1/farmers/${id}`
         );
-        setFarmer(response.data);
-        setComments(response.data.comments);
+        setFarmer(response.data); // Set farmer data
+        setComments(response.data.comments); // Set comments data
       } catch (error) {
-        setError(error.message);
+        setError(error.message); // If there's an error, show it
         toast.error("Error fetching farmer profile.");
       } finally {
-        setLoading(false);
+        setLoading(false); // Set loading to false
       }
     };
 
     fetchFarmer();
   }, [id]);
 
+  // Handle adding a comment
   const handleCommentSubmit = async () => {
     if (!newComment.trim() || newRating === 0) {
       toast.error("Please enter a comment and a rating.");
@@ -41,15 +43,16 @@ const FarmerProfile = () => {
       const response = await axios.post(
         `http://localhost:8080/api/v1/farmers/${id}/comments`,
         {
-          user: "Pranjali",
+          user: "Pranjali", // Hardcoded user for testing, replace with actual user
           comment: newComment,
           rating: newRating,
         }
       );
 
-      setComments(response.data.comments);
-      setNewComment("");
-      setNewRating(0);
+      console.log(response.data); // Log the response for debugging
+      setComments(response.data.comments); // Update comments after submission
+      setNewComment(""); // Clear comment input
+      setNewRating(0); // Reset rating input
       toast.success("Comment added successfully!");
     } catch (error) {
       setError(error.message);
@@ -57,14 +60,16 @@ const FarmerProfile = () => {
     }
   };
 
+  // Handle liking a comment
   const handleLikeComment = async (commentIndex) => {
     try {
       const response = await axios.post(
         `http://localhost:8080/api/v1/farmers/${id}/comments/like`,
-        { commentIndex }
+        { commentIndex } // Send the comment index to the server
       );
 
-      setComments(response.data.comments);
+      console.log(response.data); // Log the response for debugging
+      setComments(response.data.comments); // Update the comments with the new likes count
       toast.success("Comment liked!");
     } catch (error) {
       setError(error.message);
@@ -72,14 +77,16 @@ const FarmerProfile = () => {
     }
   };
 
+  // Handle deleting a comment
   const handleDeleteComment = async (commentIndex) => {
     try {
       const response = await axios.delete(
         `http://localhost:8080/api/v1/farmers/${id}/comments`,
-        { data: { commentIndex } } // Data for DELETE request should be sent in a `data` property
+        { data: { commentIndex } } // Data for DELETE request
       );
 
-      setComments(response.data.comments);
+      console.log(response.data); // Log the response for debugging
+      setComments(response.data.comments); // Update the comments after deletion
       toast.success("Comment deleted!");
     } catch (error) {
       setError(error.message);
@@ -87,10 +94,12 @@ const FarmerProfile = () => {
     }
   };
 
+  // If still loading, show a loading message
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  // If there was an error, show the error message
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -107,7 +116,7 @@ const FarmerProfile = () => {
       <p className="text-gray-700">Phone: {farmer.phone}</p>
       <p className="text-gray-700">Bio: {farmer.bio}</p>
 
-      {/* Comment Submission */}
+      {/* Comment Submission Section */}
       <div className="mt-4">
         <h3 className="text-lg font-semibold">Add a Comment:</h3>
         <div className="flex flex-col space-y-2">
@@ -160,7 +169,7 @@ const FarmerProfile = () => {
                     className="text-blue-500"
                     onClick={() => handleLikeComment(index)}
                   >
-                    Like ({comment.likes || 0}) {/* Display likes count */}
+                    Like ({comment.likes || 0})
                   </button>
                   <button
                     className="text-red-500"
@@ -172,7 +181,7 @@ const FarmerProfile = () => {
               </li>
             ))
           ) : (
-            <p>No comments available.</p> // Message if no comments exist
+            <p>No comments available.</p>
           )}
         </ul>
       </div>
