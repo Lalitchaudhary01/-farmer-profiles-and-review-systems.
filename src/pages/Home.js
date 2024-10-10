@@ -68,7 +68,7 @@ function Home() {
                   to={`/farmer/${farmer._id}`}
                   className="text-blue-500 text-lg"
                 >
-                  {farmer.name}
+                  {farmer.fullName}
                 </Link>
                 <p>{farmer.bio}</p>
               </li>
